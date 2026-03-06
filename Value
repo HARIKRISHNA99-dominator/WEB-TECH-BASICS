@@ -1,0 +1,189 @@
+import React from "react";
+import styled from "styled-components";
+
+const Container = styled.div`
+  padding: 40px 80px;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 40px;
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+`;
+
+const Card = styled.div`
+  border: 1px solid #e5e5e5;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  transition: 0.3s;
+  background: white;
+
+  &:hover {
+    box-shadow: 0px 5px 18px rgba(0,0,0,0.1);
+  }
+`;
+
+const Avatar = styled.div`
+  width: 90px;
+  height: 90px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const AvatarIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border: 2px solid black;
+  border-radius: 50%;
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 30px;
+    border: 2px solid black;
+    border-top: none;
+    bottom: -28px;
+    left: -10px;
+    border-radius: 0 0 30px 30px;
+  }
+`;
+
+const Content = styled.div`
+  flex: 1;
+`;
+
+const StreamTitle = styled.h3`
+  font-size: 18px;
+  margin-bottom: 6px;
+`;
+
+const Description = styled.p`
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 15px;
+`;
+
+const Name = styled.div`
+  font-weight: 600;
+  font-size: 14px;
+`;
+
+const Role = styled.div`
+  font-size: 12px;
+  color: #666;
+`;
+
+const Location = styled.div`
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 15px;
+`;
+
+const Stats = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+`;
+
+const StatBox = styled.div`
+  background: #cfe6ef;
+  padding: 6px 10px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+const HoverText = styled.div`
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+
+  &:hover {
+    color: #d6001c;
+  }
+`;
+
+const streams = [
+  {
+    title: "Financial Crime",
+    name: "Mark S Jennesson",
+    role: "Head of Financial Crime",
+  },
+  {
+    title: "Risk Stewardship Enabler",
+    name: "Kuldip Parihar",
+    role: "Head of Risk Stewardship Enabler",
+  },
+  {
+    title: "WPB Risk",
+    name: "TBC",
+    role: "Head of WPB Risk",
+  },
+  {
+    title: "Traded Risk",
+    name: "TBC",
+    role: "Head of Traded Risk",
+  },
+  {
+    title: "Compliance Controls",
+    name: "Tim Freeman",
+    role: "Head of Compliance Controls",
+  },
+  {
+    title: "Risk Management Framework Enabler",
+    name: "Mark S Jennesson",
+    role: "Head of Risk Management Framework Enabler",
+  },
+];
+
+const ValueStreams: React.FC = () => {
+  return (
+    <Container>
+      <Title>Our Value Streams</Title>
+
+      <Grid>
+        {streams.map((stream, index) => (
+          <Card key={index}>
+            <Avatar>
+              <AvatarIcon />
+            </Avatar>
+
+            <Content>
+              <StreamTitle>{stream.title}</StreamTitle>
+
+              <Description>
+                Description - Lorem Ipsum...
+              </Description>
+
+              <Name>{stream.name}</Name>
+              <Role>{stream.role}</Role>
+              <Location>United Kingdom</Location>
+
+              <Stats>
+                <StatBox>💰 12M</StatBox>
+                <StatBox>👥 550</StatBox>
+              </Stats>
+
+              <HoverText>Hover for details ›</HoverText>
+            </Content>
+          </Card>
+        ))}
+      </Grid>
+    </Container>
+  );
+};
+
+export default ValueStreams;
