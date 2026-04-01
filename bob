@@ -1,0 +1,88 @@
+"""
+Control-M XML Generator for LALQ TMIS Folder
+=============================================
+Usage:
+  1. Set COUNTRY_CODE below to your target country (e.g. "QA", "AE", "BH")
+  2. Run:  python generate_ctm.py
+  3. Output file: LALQ-<CC>-TMIS.xml
+
+Placeholder convention in the template:
+  {CC}  → uppercase country code  (e.g. KW → QA)
+  {cc}  → lowercase country code  (e.g. kw → qa)
+"""
+
+import os
+import sys
+
+# ──────────────────────────────────────────────
+#  ★  CHANGE THIS VALUE FOR EACH NEW COUNTRY  ★
+# ──────────────────────────────────────────────
+COUNTRY_CODE = "QA"          # Must be 2-3 uppercase letters, e.g. QA, AE, BH, OM
+# ──────────────────────────────────────────────
+
+TEMPLATE_FILE = "template_LALQ_TMIS.xml"   # template must be in the same folder
+OUTPUT_DIR    = "output"                   # generated files go here
+
+
+def validate_country_code(code: str) -> str:
+    code = code.strip().upper()
+    if not code.isalpha() or not (2 <= len(code) <= 3):
+        raise ValueError(f"Invalid country code '{code}'. Must be 2-3 letters (e.g. QA, AE, BH).")
+    return code
+
+
+def generate(country_code: str, template_path: str, output_dir: str) -> str:
+    cc_upper = validate_country_code(country_code)
+    cc_lower = cc_upper.lower()
+
+    # Read template
+    if not os.path.isfile(template_path):
+        raise FileNotFoundError(
+            f"Template not found: '{template_path}'\n"
+            f"Make sure '{os.path.basename(template_path)}' is in the same directory as this script."
+        )
+
+    with open(template_path, "r", encoding="utf-8") as fh:
+        content = fh.read()
+
+    # Replace placeholders
+    content = content.replace("{CC}", cc_upper)
+    content = content.replace("{cc}", cc_lower)
+
+    # Write output
+    os.makedirs(output_dir, exist_ok=True)
+    output_filename = f"LALQ-{cc_upper}-TMIS.xml"
+    output_path = os.path.join(output_dir, output_filename)
+
+    with open(output_path, "w", encoding="utf-8") as fh:
+        fh.write(content)
+
+    return output_path
+
+
+def main():
+    # Allow country code to be passed on the command line, e.g.:
+    #   python generate_ctm.py QA
+    #   python generate_ctm.py AE BH OM       ← multiple countries at once
+    codes = sys.argv[1:] if len(sys.argv) > 1 else [COUNTRY_CODE]
+
+    script_dir    = os.path.dirname(os.path.abspath(__file__))
+    template_path = os.path.join(script_dir, TEMPLATE_FILE)
+    output_dir    = os.path.join(script_dir, OUTPUT_DIR)
+
+    print(f"Template : {template_path}")
+    print(f"Output   : {output_dir}")
+    print()
+
+    for code in codes:
+        try:
+            out = generate(code, template_path, output_dir)
+            print(f"  [OK]  Created → {out}")
+        except (ValueError, FileNotFoundError) as exc:
+            print(f"  [ERR] {exc}")
+
+    print("\nDone.")
+
+
+if __name__ == "__main__":
+    main()
