@@ -1,0 +1,49 @@
+CREATE OR REPLACE VIEW
+fccase_dataset.vw_case_extraction AS
+
+SELECT
+    rc.external_case_id,
+    rc.case_source,
+    rc.case_status,
+    rc.sub_domain,
+    rc.assigned_to,
+    rc.case_creation_date,
+    rc.case_closed_date,
+    rc.primary_financial_crime_type,
+    rc.case_outcome,
+
+    ref.mapping_id,
+    ref.case_country,
+
+    ct.case_type,
+
+    co.legal_entity,
+
+    cs.subject_id,
+    cs.subject_link_type,
+    cs.linked_date,
+
+    s.subject_name,
+    s.subject_country,
+    s.subject_type
+
+FROM fccase_dataset.related_case rc
+
+LEFT JOIN fccase_dataset.reference_case ref
+    ON rc.external_case_id = ref.external_case_id
+   AND rc.case_source = ref.case_source
+
+LEFT JOIN fccase_dataset.case_type ct
+    ON rc.external_case_id = ct.external_case_id
+   AND rc.case_source = ct.case_source
+
+LEFT JOIN fccase_dataset.case_orgunit co
+    ON rc.external_case_id = co.external_case_id
+   AND rc.case_source = co.case_source
+
+LEFT JOIN fccase_dataset.case_subject cs
+    ON rc.external_case_id = cs.external_case_id
+   AND rc.case_source = cs.case_source
+
+LEFT JOIN fccase_dataset.subject s
+    ON cs.subject_id = s.subject_id;
